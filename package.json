@@ -1,5 +1,5 @@
 {
-  "name": "ap_demo",
+  "name": "api_demo",
   "version": "1.0.0",
   "description": "hiredchina user microservices",
   "main": "index.js",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ThomasLiu/ap_demo.git"
+    "url": "git+https://github.com/ThomasLiu/api_demo.git"
   },
   "author": "Thomas Lau",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ThomasLiu/ap_demo/issues"
+    "url": "https://github.com/ThomasLiu/api_demo/issues"
   },
-  "homepage": "https://github.com/ThomasLiu/ap_demo#readme",
+  "homepage": "https://github.com/ThomasLiu/api_demo#readme",
   "dependencies": {
     "bcryptjs": "^2.3.0",
     "bluebird": "^3.4.1",

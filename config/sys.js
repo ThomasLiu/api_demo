@@ -3,8 +3,8 @@ var config = {
   description: 'Api demo', // 网站的描述
   keywords: '',
 
-  session_secret: 'ap_demo_secret', // 务必修改
-  auth_cookie_name: 'ap_demo',
+  session_secret: 'api_demo_secret', // 务必修改
+  auth_cookie_name: 'api_demo',
 
   port: 3010,
 
