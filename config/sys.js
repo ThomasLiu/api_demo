@@ -10,7 +10,6 @@ var config = {
 
   list_count: 20,
 
-
   host: 'http://localhost:3010',
   base_host: 'http://localhost:3000',
   appId: 'someAppId',
