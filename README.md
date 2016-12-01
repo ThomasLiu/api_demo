@@ -14,6 +14,11 @@ and change the database name and password from /config/mysql.js
 npm start
 ```
 
+## test
+```
+npm run test
+```
+
 
 
 
