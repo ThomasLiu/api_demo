@@ -1,6 +1,6 @@
 var dbSetting = {
   host: '127.0.0.1',
-  database: 'database_test',
+  database: 'hired_china_test',
   user: 'root',
   password: '5201314',
   dialect: 'mysql',

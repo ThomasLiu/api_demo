@@ -11,7 +11,7 @@ var request = function *({url , method = 'get' , query, send}){
 
     var data = {},err
 
-    var tokenRequest = yield getToken()
+    var tokenRequest = yield getToken(url)
 
     data = tokenRequest.data
     if (tokenRequest.err) {
@@ -27,7 +27,7 @@ var request = function *({url , method = 'get' , query, send}){
     if (json.data && json.data.isTokenErr) {
         logger.debug(`request url :${url} , isTokenErr :${json.data.isTokenErr}`)
 
-        yield getTokenRequest()
+        yield getTokenRequest(url)
 
         return yield request({url: url , method: method, query: query, send: send})
 
@@ -62,12 +62,13 @@ var justRequest = function *({url , method = 'get' , query, send, token}){
 }
 
 
-var getToken = function *(){
+var getToken = function *(url){
     var username = Config.appId
     var password = Config.appSecret
+    var host = _getHost(url)
     logger.debug(`getToken username :${username}, password:${password}`)
 
-    var cache_token = yield cache.get(`${Config.session_secret}-api-token-${username}`)
+    var cache_token = yield cache.get(`${Config.session_secret}-${host}-api-token`)
 
     if (cache_token) {
         var err
@@ -75,7 +76,7 @@ var getToken = function *(){
             token : cache_token,
         }}
     } else {
-        var {err, data} = yield getTokenRequest(username,password)
+        var {err, data} = yield getTokenRequest(url)
         return {err: err , data : {
             token : data.token,
             role : data.roleType,
@@ -84,15 +85,18 @@ var getToken = function *(){
     }
 }
 
-var getTokenRequest = function *(){
+var getTokenRequest = function *(url){
     var username = Config.appId
     var password = Config.appSecret
-    logger.debug(`getTokenRequest ${Config.base_host}/api/auth username :${username}, password:${password}`)
+    var host = _getHost(url)
+    var getTokenUrl = `http://${host}/api/auth`
+
+    logger.debug(`getTokenRequest ${getTokenUrl} username :${username}, password:${password}`)
 
     var err, data, res
 
     try {
-        res = yield superagent.post(`${Config.base_host}/api/auth`)
+        res = yield superagent.post(getTokenUrl)
         .type('json')
         .send({username: username, password: password})
 
@@ -103,7 +107,7 @@ var getTokenRequest = function *(){
             data = json.data
 
             if(data.token){
-                yield cache.set(`${Config.session_secret}-api-token-${username}`, data.token , 3600 * 24)
+                yield cache.set(`${Config.session_secret}-${host}-api-token`, data.token , 3600 * 24)
             } else {
                 err = `getToken error: ${data.message}`
             }
@@ -115,6 +119,12 @@ var getTokenRequest = function *(){
     
     return {err: err , data : data}
 }
+
+var _getHost = function (url) {
+  var temp = url.replace('http://','').replace('https://','')
+  return temp.substring(0,temp.indexOf('/'))
+}
+
 
 exports.request = request
 
